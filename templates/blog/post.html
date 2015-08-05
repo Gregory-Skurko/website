@@ -1,0 +1,60 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="post">
+    <div>{{ post.title }}</div>
+    <div>{{ post.created }}</div>
+    <div class="block-text">{{ post.body }}</div>
+</div>
+{% if comments %}
+    <div style="padding-bottom: 1em;">Comments:</div>
+    {% for comment in comments %}
+        <div class="comment">
+            <div>{{ comment.created }} | {{ comment.author }}</div>
+            <div class="block-text">{{ comment.body }}</div>
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form method="POST">
+    <label>Add comment:</label>
+    <div class="row-fluid">
+        <label>Name:</label>
+        <input id="author">
+    </div>
+    <br>
+    <div class="row-fluid">
+        <label>Text:</label>
+        <textarea id="body" style="min-width: 300px; min-height: 100px;"></textarea>
+    </div>
+    <br>
+    <div class="row-fluid">
+        <button>Send</button>
+    </div>
+</form>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
