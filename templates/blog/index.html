@@ -1,29 +1,7 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-{% for post in posts %}
-    <div class="post">
-        <div><a href="post{{post.id}}"><h3>{{post.title}}</h3></a></div>
-        <div>{{post.user}} | {{post.created}}</div>
-        <ul class="tags">
-            {% for tag in post.tag.all %}
-                <li><a href="#" class="tag">{{tag}}</a></li>
-            {% endfor %}
-        </ul>
-        <div class="post-text">{{post.body|safe}}</div>
-    </div>
-{% endfor %}
 
-<script>
-    var size = 120,
-    newsContent= $('.block-text');
-
-    for (var i = 0; i < newsContent.length; ++i){
-        if(newsContent[i].innerHTML.length > size){
-            newsContent[i].innerHTML = newsContent[i].innerHTML.slice(0, size) + '...';
-        }
-    }
-</script>
 {% endblock %}
 
 

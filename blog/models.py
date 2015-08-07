@@ -16,6 +16,7 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     tag = models.ManyToManyField(Tag, blank=True)
     body = models.TextField()
+    rating = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -28,6 +29,7 @@ class Comment(models.Model):
     post = models.OneToOneField(Post)
     created = models.DateTimeField(auto_now_add=True)
     body = models.TextField()
+    rating = models.IntegerField(default=0)
 
     def __str__(self):
         return self.author

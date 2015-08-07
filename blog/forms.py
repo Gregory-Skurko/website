@@ -24,6 +24,14 @@ class AuthorizeForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={'id': 'password', 'placeholder': 'Password', 'class': 'form-control'}), required=True)
 
 
+class NewPostForm(forms.Form):
+    title = forms.CharField(widget=forms.TextInput(attrs={'id': 'title', 'placeholder': 'Title', 'class': 'form-control'}), required=True)
+    body = forms.CharField(widget = forms.Textarea(attrs={'id': 'body', 'placeholder': 'Body', 'class': 'form-control'}), required=True)
+
+
+
+
+
 
 
 

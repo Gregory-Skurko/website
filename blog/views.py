@@ -10,23 +10,26 @@ from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django.template.context_processors import csrf
 from django.views.decorators.http import require_http_methods
-from blog.forms import CommentForm, RegisterForm, AuthorizeForm
+from blog.forms import CommentForm, RegisterForm, AuthorizeForm, NewPostForm
 from blog.models import Post, Comment, Avatar
 
 
-def index(request, username):
+def index(request):
     try:
-        current_user = User.objects.get(username=username)
-        posts = Post.objects.filter(user=current_user)
+        objects = Post.objects.all()
+        if len(objects) > 5:
+            posts = objects[len(objects) - 5:]
+        else:
+            posts = objects
     except:
         raise Http404()
 
-    return render_to_response("blog/index.html", {'posts': posts})
+    return render_to_response("blog/user_posts.html", {'posts': posts})
 
 def user_posts(request, username):
     try:
         current_user = User.objects.get(username=username)
-        posts = Post.objects.filter(user=current_user)
+        posts = Post.objects.reverse().filter(user=current_user)
     except:
         raise Http404()
 
@@ -54,6 +57,9 @@ def post(request, username, post_id):
                               context_instance=RequestContext(request))
 
 def register(request):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('/'+request.user.username)
+
     template = 'blog/register.html'
     args = {}
     if request.method == 'POST':
@@ -78,10 +84,10 @@ def register(request):
     return render_to_response(template, args, context_instance=RequestContext(request))
 
 def login(request):
-    args = {}
     if request.user.is_authenticated():
         return HttpResponseRedirect('/'+request.user.username)
-    
+
+    args = {}
     if not request.user.is_authenticated() and request.method == 'POST':
         user = authenticate(username=request.POST['username'], password=request.POST['password'])
         if user is not None:
@@ -99,6 +105,25 @@ def login(request):
 def logout(request):
     standart_logout(request)
     return HttpResponseRedirect('/login')
+
+def add_post(request):
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/login')
+
+    if request.method == 'POST':
+        form = NewPostForm(request.POST)
+        if form.is_valid():
+            new_post = Post(user=request.user, title=form.cleaned_data['title'], body=form.cleaned_data['body'])
+            new_post.save()
+            return HttpResponseRedirect('/'+request.user.username+'/post'+str(new_post.id))
+    else:
+        form = NewPostForm()
+
+    return render_to_response('blog/add-post.html', {'form': form}, context_instance=RequestContext(request))
+
+
+
+
 
 
 

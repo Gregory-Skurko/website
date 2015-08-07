@@ -3,7 +3,7 @@
 {% block content %}
 <div class="post">
     <div><h3>{{ post.title }}</h3></div>
-    <div>{{ post.created }}</div>
+    <div><a href="/{{post.user.username}}/">{{post.user}}</a> | {{post.created}}</div>
     <div class="post-text">{{post.body|safe}}</div>
     <ul class="tags">
         {% for tag in post.tag.all %}
