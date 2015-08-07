@@ -1,10 +1,24 @@
-.head {
-    margin-bottom: 2em;
-    padding-top: 1em;
+a:hover {text-decoration:none;}
+a {text-decoration:none;}
+
+body {
+    background: #383838;
 }
 
+.head {
+    background-color: lightblue;
+    margin-bottom: 2em;
+    padding: 1em;
+    height: 50px;
+}
+
+.date {
+    float: right;
+}
 .post {
+    background-color: white;
     margin-bottom: 3em;
+    padding: 1em;
 }
 
 .title {
@@ -12,15 +26,24 @@
     margin-bottom: 1em;
 }
 
-.block-text {
-    background-color: #d0e4fe;
+.block-text, .post-text {
     border-bottom: 1px solid;
     border-top: 1px solid;
     padding: 1em 0;
 }
 
+.post-text {
+    margin: 0 0 1em 0;
+}
+
 .comment {
+    background: #d3d3d3;
     margin-bottom: 2em;
+    padding: 1em;
+}
+
+.increased {
+    font-size: 2.1em;
 }
 
 .vert-offset-top-12{

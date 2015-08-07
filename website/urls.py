@@ -8,6 +8,10 @@ urlpatterns = [
 
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^$', blog_views.index),
-    url(r'^post(?P<post_id>[0-9]+)/$', blog_views.post)
+
+    url(r'^register/$', blog_views.register),
+    url(r'^login/$', blog_views.login),
+    url(r'^logout/$', blog_views.logout),
+    url(r'^(?P<username>(\w+))/post(?P<post_id>[0-9]+)/$', blog_views.post),
+    url(r'^(?P<username>(\w+))/$', blog_views.index),
 ]
