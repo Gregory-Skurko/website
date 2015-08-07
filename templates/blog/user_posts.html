@@ -1,8 +1,17 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
+{% if not empty %}
 {% for post in posts reversed %}
     <div class="post">
+        <!--
+        REMOVE POST
+        <div class="span4" style="text-align: right;float: right;">
+            <a href="/" class="btn" data-toggle="tooltip" data-placement="bottom" title="Home">
+                <span class="glyphicon glyphicon-remove"></span>
+            </a>
+        </div>
+        -->
         <div><a href="/{{post.user.username}}/post{{post.id}}"><h3>{{post.title}}</h3></a></div>
         <div><a href="/{{post.user.username}}/">{{post.user}}</a> | {{post.created}}</div>
         <ul class="tags">
@@ -13,7 +22,9 @@
         <div class="post-text">{{post.body|safe}}</div>
     </div>
 {% endfor %}
-
+{% else %}
+    <div class="post">Not posts :-(</div>
+{% endif %}
 <script>
     var size = 120,
     newsContent= $('.block-text');

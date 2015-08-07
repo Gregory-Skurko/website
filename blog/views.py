@@ -17,10 +17,7 @@ from blog.models import Post, Comment, Avatar
 def index(request):
     try:
         objects = Post.objects.all()
-        if len(objects) > 5:
-            posts = objects[len(objects) - 5:]
-        else:
-            posts = objects
+        posts = objects
     except:
         raise Http404()
 
@@ -28,12 +25,16 @@ def index(request):
 
 def user_posts(request, username):
     try:
+        args = {}
         current_user = User.objects.get(username=username)
         posts = Post.objects.reverse().filter(user=current_user)
+        args.update({'posts': posts})
+        if len(posts) == 0:
+            args.update({'empty': True})
     except:
         raise Http404()
 
-    return render_to_response("blog/user_posts.html", {'posts': posts})
+    return render_to_response("blog/user_posts.html", args)
 
 
 def post(request, username, post_id):

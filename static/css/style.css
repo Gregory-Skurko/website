@@ -5,6 +5,12 @@ body {
     background: #383838;
 }
 
+.avatar {
+    height: 50px;
+    width: 60px;
+    margin-top: 2em;
+}
+
 .head {
     background-color: lightblue;
     margin-bottom: 2em;
@@ -36,6 +42,11 @@ body {
     margin: 0 0 1em 0;
 }
 
+.menu-btn {
+    padding: 1em 0;
+    text-align: center;
+}
+
 .comment {
     background: #d3d3d3;
     margin-bottom: 2em;
@@ -44,6 +55,10 @@ body {
 
 .increased {
     font-size: 2.1em;
+}
+
+.fixed {
+    position: fixed;
 }
 
 .vert-offset-top-12{
