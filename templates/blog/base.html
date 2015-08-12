@@ -2,16 +2,19 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-theme.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/icons.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/tag.css' %}">
-
+    <link rel="stylesheet" type="text/css" href="{% static 'css/materialize.min.css' %}">
 
     <script type="text/javascript" src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/materialize.min.js' %}"></script>
 </head>
 <body>
 
@@ -19,42 +22,69 @@
     <div class="span1 vert-offset-top-2 fixed">
                 <div class="panel panel-primary"style="border: 0; background-color: transparent;">
                         <ul class="nav nav-pills nav-stacked">
-                            <li>
-                                {% if user.is_authenticated %}
+                            {% if user.is_authenticated %}
+                                <li>
 
-                                {% else %}
-                                <img src="{% static 'img/0.jpg' %}" style="height: 60px; width: 100%;">
+                                    <a href="/{{user.username}}" style="padding: 0;">
+                                        <img src="{% if user.avatar.url != '' %}{{user.avatar.url}}{% else %}{% static img %}img/avatars/0.jpg{% endif %}"
+                                    style="height: 60px; width: 100%;"></a>
 
-                                {% endif %}
-
-                                <div style="text-align: center; color: white;">
-                                    Nick
-                                </div>
-                            </li>
-                            <li>
-                            <a href="/" class="btn-fluid menu-btn" data-toggle="tooltip" data-placement="bottom" title="Home">
-                                <span class="glyphicon glyphicon-home increased"></span>
-                            </a>
-                            </li>
-                            <li>
-                            <a href="/add-post" class="btn menu-btn" data-content="Add post" data-toggle="tooltip" data-placement="bottom" title="Add post">
-                                <span class="glyphicon glyphicon-plus increased" style="left: 3px;"></span>
-                            </a>
-                            </li>
-                            <li>
-                            <a href="/" class="btn-fluid menu-btn" data-content="Settings" data-toggle="tooltip" data-placement="bottom" title="Settings" style="left: 3px;">
-                                <span class="glyphicon glyphicon-cog increased"></span>
-                            </a>
-                            </li>
-                            <li>
-                            <a href="/logout" class="btn-fluid menu-btn" data-content="Log out" data-toggle="tooltip" data-placement="bottom" title="Log out" style="left: 3px;">
-                                <span class="glyphicon glyphicon-off increased"></span>
-                            </a>
-                            </li>
+                                 </li>
+                                <li>
+                                <a href="/" class="btn-fluid menu-btn tooltipped"
+                                    data-toggle="tooltip" data-placement="bottom"
+                                    data-position="right" data-delay="50" data-tooltip="Home">
+                                    <span class="glyphicon glyphicon-home increased"></span>
+                                </a>
+                                </li>
+                                <li  >
+                                <a href="/add-post" class="tooltipped"
+                                   data-content="Add post" data-toggle="tooltip" data-placement="bottom"
+                                   data-position="right" data-delay="50" data-tooltip="New post">
+                                    <i class="material-icons medium" >playlist_add</i>
+                                </a>
+                                </li>
+                                <li>
+                                <a href="/" class="btn-fluid menu-btn tooltipped"
+                                    data-content="Settings" data-toggle="tooltip" data-placement="bottom"
+                                    data-position="right" data-delay="50" data-tooltip="Profile settings"
+                                    style="left: 2px;">
+                                    <span class="glyphicon glyphicon-cog increased"></span>
+                                </a>
+                                </li>
+                                <li>
+                                <a href="/logout" class="btn-fluid menu-btn tooltipped"
+                                    data-content="Log out" data-toggle="tooltip" data-placement="bottom"
+                                    data-position="right" data-delay="50" data-tooltip="Log out"
+                                    style="left: 2px;">
+                                    <span class="glyphicon glyphicon-log-out increased"></span>
+                                </a>
+                                </li>
+                            {% else %}
+                                <li>
+                                <a href="/" class="btn-fluid menu-btn" data-toggle="tooltip" data-placement="bottom" title="Home">
+                                    <span class="glyphicon glyphicon-home increased"></span>
+                                </a>
+                                </li>
+                                <li>
+                                <a href="/login" class="btn-fluid menu-btn" data-toggle="tooltip" data-placement="bottom" title="Log in">
+                                    <span class="glyphicon glyphicon-log-in increased"></span>
+                                </a>
+                                </li>
+                                <li>
+                                <a href="/register" class="btn-fluid menu-btn" data-content="Register" data-toggle="tooltip" data-placement="bottom" title="Register">
+                                    <span class="glyphicon glyphicon-registration-mark increased"></span>
+                                </a>
+                                </li>
+                            {% endif %}
                         </ul>
                 </div>
-
     </div>
+    <script>
+        $(document).ready(function(){
+            $('.tooltipped').tooltip({delay: 50});
+          });
+    </script>
 {% endblock %}
 
 <div class="span7 offset3 vert-offset-top-2" style="position: absolute;">

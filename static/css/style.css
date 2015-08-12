@@ -48,7 +48,8 @@ body {
 }
 
 .comment {
-    background: #d3d3d3;
+    //background: #d3d3d3;
+    background: white;
     margin-bottom: 2em;
     padding: 1em;
 }

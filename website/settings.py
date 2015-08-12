@@ -56,6 +56,8 @@ ROOT_URLCONF = 'website.urls'
 
 TEMPLATES = [
     {
+        #website.blog.auth_backends.UserProfileModelBackend
+        #django.template.backends.django.DjangoTemplates
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
@@ -105,3 +107,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static/').replace('\\', '/'),
 )
+
+USER_PROFILE_MODEL = 'blog.User'
+AUTH_USER_MODEL = 'blog.User'
+MEDIA_URL='/'

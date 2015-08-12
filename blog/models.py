@@ -1,6 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 # Create your models here.
+
+AbstractUser._meta.get_field('email')._unique = True
+AbstractUser._meta.get_field('email').blank = False
+
+class User(AbstractUser):
+    avatar = models.ImageField(upload_to='static/img/avatars/', blank=True)
+
 class Tag(models.Model):
     tag = models.CharField(max_length=20, primary_key=True)
 
@@ -38,15 +45,8 @@ class Comment(models.Model):
         return self.author
 
 
-class Avatar(models.Model):
-    user = models.OneToOneField(User, primary_key=True)
-    img = models.ImageField()
 
-    def __str__(self):
-        return self.img.name
 
-    def __unicode__(self):
-        return self.img.name
 
 
 

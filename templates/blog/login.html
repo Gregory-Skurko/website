@@ -4,36 +4,32 @@
 
 <form action="" class="form-horizontal" method="POST" style="background: white; padding: 1em;">
         {% csrf_token %}
-         <div class="form-group
-            {% if post %}
-                {% if form.username.errors %}
-                    has-error
-                {% else %}
-                    has-success
-                {% endif %}
+         <div class="row
+            {% if error %}
+                has-error
+            {% else %}
+                has-success
             {% endif %}">
-          <label class="control-label col-sm-2" for="username">Username:</label>
-          <div class="col-sm-10">
-              {{form.username}}
+          <div class="input-field col s12">
+                <i class="material-icons prefix">account_circle</i>
+                {{form.username}}
+                <label for="username">Username</label>
           </div>
         </div>
-        <div class="form-group
-            {% if post %}
-                {% if form.password.errors %}
-                    has-error
-                {% else %}
-                    has-success
-                {% endif %}
+        <div class="row
+            {% if error %}
+                has-error
+            {% else %}
+                has-success
             {% endif %}">
-          <label class="control-label col-sm-2" for="password">Password:</label>
-          <div class="col-sm-10">
-              {{form.password}}
-          </div>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">lock</i>
+                {{form.password}}
+                <label for="password">Password</label>
+            </div>
         </div>
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-default">Log in</button>
-          </div>
+        <div class="row">
+            <button type="submit" class="waves-effect waves-light btn material-icons left">Log in</button>
         </div>
 </form>
 

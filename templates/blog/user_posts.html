@@ -13,21 +13,22 @@
         </div>
         -->
         <div><a href="/{{post.user.username}}/post{{post.id}}"><h3>{{post.title}}</h3></a></div>
-        <div><a href="/{{post.user.username}}/">{{post.user}}</a> | {{post.created}}</div>
+        <div><span class="glyphicon glyphicon-time"></span>{{ post.created}}</div>
+        <div class="post-text">{{post.body|safe}}</div>
+        <div><a href="/{{post.user.username}}/"><span class="glyphicon glyphicon-user"></span>{{post.user}}</a></div>
         <ul class="tags">
             {% for tag in post.tag.all %}
                 <li><a href="#" class="tag">{{tag}}</a></li>
             {% endfor %}
         </ul>
-        <div class="post-text">{{post.body|safe}}</div>
     </div>
 {% endfor %}
 {% else %}
     <div class="post">Not posts :-(</div>
 {% endif %}
 <script>
-    var size = 120,
-    newsContent= $('.block-text');
+    var size = 300,
+    newsContent= $('.post-text');
 
     for (var i = 0; i < newsContent.length; ++i){
         if(newsContent[i].innerHTML.length > size){
