@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="row">
-<form action="" class="col s12" method="POST" enctype="multipart/form-data" style="background: white; padding: 1em;">
+<form action="" class="col s12" method="post" enctype="multipart/form-data" style="background: white; padding: 1em;">
         {% csrf_token %}
         <!--{% if form.errors %}-->
         <!--<div class="text-danger">Please correct the error{{ form.errors|pluralize }} below.</div>-->
@@ -66,6 +66,13 @@
             {{form.avatar}}
             <input class="file-path" type="text"/>
             <label for="{{form.avatar.id_for_label}}">Avatar</label>
+        </div>
+            {% if form.avatar.errors %}
+                <div class="alert alert-danger fade in">
+                    <strong>{{form.avatar.errors}}</strong>
+                </div>
+            {% else %}
+            {% endif %}
         </div>
         <img src="..." class="img-polaroid">
 

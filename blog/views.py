@@ -28,7 +28,7 @@ def posts(request, username=None):
     except:
         raise Http404()
 
-    return render_to_response("blog/user_posts.html", args)
+    return render_to_response("blog/posts.html", args)
 
 
 def post(request, username, post_id):
@@ -54,15 +54,15 @@ def post(request, username, post_id):
 def register(request):
     try:
         if request.user.is_authenticated():
-            return HttpResponseRedirect('/' + request.user.username)
+            return HttpResponseRedirect('/')
 
         template = 'blog/register.html'
         args = {}
         if request.method == 'POST':
             form = RegisterForm(request.POST, request.FILES)
-            if form.is_valid() and form.cleaned_data['password1'] == form.cleaned_data['password2']:
+            if form.is_valid() and form.cleaned_data['password'] == form.cleaned_data['password_confirm']:
                 user = User(username=form.cleaned_data['username'],
-                            password=make_password(form.cleaned_data['password1']),
+                            password=make_password(form.cleaned_data['password']),
                             email=form.cleaned_data['email'],
                             avatar=form.cleaned_data['avatar'])
 
@@ -74,8 +74,6 @@ def register(request):
             form = RegisterForm()
 
         args.update({'form': form})
-    except ValidationError:
-        raise Http404('valid')
     except:
         raise Http404()
     return render_to_response(template, args, context_instance=RequestContext(request))

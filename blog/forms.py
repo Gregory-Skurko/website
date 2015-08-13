@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, ReadOnlyPasswordHashField
+from django.contrib.auth.hashers import make_password
 from django.core.validators import RegexValidator
 from django.forms import ModelForm
 from blog.models import User
@@ -12,8 +13,6 @@ class CommentForm(forms.Form):
 
 
 class RegisterForm(forms.Form):
-    error_css_class = 'error'
-
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
 
     username = forms.CharField(required=True, validators=[alphanumeric],
@@ -32,7 +31,7 @@ class RegisterForm(forms.Form):
 
     avatar = forms.ImageField(required=False,
                               widget=forms.FileInput(
-                                  attrs={'id': 'avatar', 'class': 'validate', 'type': 'text'}))
+                                  attrs={'id': 'avatar', 'class': 'validate'}))
     def clean_username(self):
         username = self.cleaned_data['username']
         try:
@@ -40,6 +39,15 @@ class RegisterForm(forms.Form):
         except User.DoesNotExist:
             return username
         raise forms.ValidationError('%s already exists' % username)
+
+    def clean_avatar(self):
+        avatar = self.cleaned_data.get('avatar', False)
+        if avatar:
+            max_size = 4 * 1024 * 1024
+            if avatar._size > max_size:
+                raise forms.ValidationError("Image file too large ( > 4mb )")
+            else:
+                return self.avatar
 
     def clean(self):
         data = self.cleaned_data
@@ -55,6 +63,24 @@ class AuthorizeForm(forms.Form):
         widget=forms.PasswordInput(attrs={'id': 'password', 'class': 'validate'}),
         required=True)
 
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        try:
+            user = User.objects.get(username=username)
+        except User.DoesNotExist:
+            raise forms.ValidationError('No such user %s' % username)
+        return username
+
+
+    def clean_password(self):
+        data = self.cleaned_data
+        if 'username' in data and 'password' in data:
+            password = self.cleaned_data['password']
+            user = User.objects.get(username=self.cleaned_data['username'])
+            if not user.check_password(password):
+                raise forms.ValidationError('Incorrect password')
+            else:
+                return password
 
 class NewPostForm(forms.Form):
     title = forms.CharField(
