@@ -1,0 +1,129 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+<div class="row">
+<form action="" class="col s12" method="post" enctype="multipart/form-data" style="background: white; padding: 1em;">
+        {% csrf_token %}
+        <!--{% if form.errors %}-->
+        <!--<div class="text-danger">Please correct the error{{ form.errors|pluralize }} below.</div>-->
+        <!--{% endif %}-->
+        <div class="row">
+            <div class="input-field col s12 {% if error %}{% if form.username.errors %}has-error{% else %}has-success{% endif %}{% endif %}">
+                <i class="material-icons prefix">account_circle</i>
+                <label for="{{form.username.id_for_label}}">Username</label>
+                {{form.username}}
+            </div>
+            {% if form.username.errors %}
+                <div class="alert alert-danger fade in">
+                    <strong>{{form.username.errors}}</strong>
+                </div>
+            {% else %}
+            {% endif %}
+        </div>
+        <div class="row {% if error %}{% if form.password.errors %}has-error{% else %}has-success{% endif %}{% endif %}">
+            <div class="input-field col s12">
+                <i class="material-icons prefix">lock</i>
+                {{form.password}}
+                <label for="{{form.password.id_for_label}}">Password</label>
+            </div>
+            {% if form.password.errors %}
+                <div class="alert alert-danger fade in">
+                    <strong>{{form.password.errors}}</strong>
+                </div>
+            {% else %}
+            {% endif %}
+        </div>
+        <div class="row {% if error %}{% if form.password_confirm.errors %}has-error{% else %}has-success{% endif %}{% endif %}">
+            <div class="input-field col s12">
+                <i class="material-icons prefix">lock</i>
+                {{form.password_confirm}}
+                <label for="{{form.password_confirm.id_for_label}}">Confirm password</label>
+            </div>
+            {% if form.password_confirm.errors or form.non_field_errors %}
+                <div class="alert alert-danger fade in">
+                    <strong>{{form.password_confirm.errors}}{{form.non_field_errors}}</strong>
+                </div>
+            {% else %}
+            {% endif %}
+        </div>
+        <div class="row {% if error %}{% if form.email.errors %}has-error{% else %}has-success{% endif %}{% endif %}">
+            <div class="input-field col s12">
+                <i class="material-icons prefix">email</i>
+                {{form.email}}
+                <label for="{{form.email.id_for_label}}">Email</label>
+            </div>
+            {% if form.email.errors %}
+                <div class="alert alert-danger fade in">
+                    <strong>{{form.email.errors}}</strong>
+                </div>
+            {% else %}
+            {% endif %}
+        </div>
+
+        <div class="row">
+            <div class="file-field input-field col s11">
+            <i class="material-icons prefix">file_upload</i>
+            {{form.avatar}}
+            <input class="file-path" type="text"/>
+            <label for="{{form.avatar.id_for_label}}">Avatar</label>
+        </div>
+            {% if form.avatar.errors %}
+                <div class="alert alert-danger fade in">
+                    <strong>{{form.avatar.errors}}</strong>
+                </div>
+            {% else %}
+            {% endif %}
+        </div>
+        <div class="row">
+            <button type="submit" class="waves-effect waves-light btn material-icons left">Send</button>
+        </div>
+
+</form>
+</div>
+
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

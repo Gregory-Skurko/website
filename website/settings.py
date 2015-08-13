@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bootstrap3',
+    'account_manager',
     'blog',
 )
 
@@ -56,8 +57,6 @@ ROOT_URLCONF = 'website.urls'
 
 TEMPLATES = [
     {
-        #website.blog.auth_backends.UserProfileModelBackend
-        #django.template.backends.django.DjangoTemplates
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
@@ -108,6 +107,6 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static/').replace('\\', '/'),
 )
 
-USER_PROFILE_MODEL = 'blog.User'
-AUTH_USER_MODEL = 'blog.User'
+USER_PROFILE_MODEL = 'account_manager.User'
+AUTH_USER_MODEL = 'account_manager.User'
 MEDIA_URL='/'
