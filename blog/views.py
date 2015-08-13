@@ -8,7 +8,7 @@ from django.shortcuts import render, render_to_response
 # Create your views here.
 from django.template import RequestContext
 from account_manager.models import User
-from blog.forms import CommentForm, NewPostForm
+from blog.forms import CommentForm, NewPostForm, SearchForm
 from blog.models import Post, Comment, Tag
 
 
@@ -60,9 +60,9 @@ def add_post(request):
         form = NewPostForm(request.POST)
         if form.is_valid():
             new_post = Post(user=request.user, title=form.cleaned_data['title'], body=form.cleaned_data['body'])
-            tags = form.cleaned_data['tags'].split()
             new_post.save()
 
+            tags = form.cleaned_data['tags'].split()
             for tag in tags:
                 new_tag = Tag(tag=tag)
                 new_tag.save()
@@ -75,10 +75,41 @@ def add_post(request):
 
 
 def search(request, search_request=None, type_request=None):
-    return render_to_response('blog/search.html')
+    template = 'blog/search.html'
+    args = {}
 
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            request_type = form.cleaned_data['request_type']
+            if request_type == 'tag':
+                existing_tags = [t.tag for t in Tag.objects.all()]
+                tags = [tag for tag in form.cleaned_data['request'].split() if tag in existing_tags]
+                list_post = []
 
+                for post in Post.objects.all():
+                    post_tags = [t.tag for t in post.tag.all()]
 
+                    if all(tag in post_tags for tag in tags):
+                        list_post.append(post)
+
+                args.update({'posts': list_post})
+            elif request_type == 'user':
+                args.update({'posts': Post.objects.filter(user=User.objects.get(username=form.cleaned_data['request']))})
+            elif request_type == 'post':
+                args.update({'posts': Post.objects.filter(title=form.cleaned_data['request'])})
+    else:
+        list_post = []
+        for post in Post.objects.all():
+            post_tags = [t.tag for t in post.tag.all()]
+            if search_request in post_tags:
+                list_post.append(post)
+        args.update({'posts': list_post})
+        form = SearchForm()
+
+    args.update({'user': request.user})
+    args.update({'form': form})
+    return render_to_response(template, args)
 
 
 

@@ -8,9 +8,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-responsive.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-theme.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/icons.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/tag.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/materialize.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/tag.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
     <script type="text/javascript" src="{% static 'js/jquery-2.1.4.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/script.js' %}"></script>
@@ -24,12 +24,20 @@
                         <ul class="nav nav-pills nav-stacked">
                             {% if user.is_authenticated %}
                                 <li>
-
-                                    <a href="/{{user.username}}" style="padding: 0;">
+                                    <a href="/{{user.username}}" style="padding: 0;"
+                                       class="tooltipped"
+                                        data-toggle="tooltip" data-placement="bottom"
+                                        data-position="right" data-delay="50" data-tooltip="{{user.username}}">
                                         <img src="{% if user.avatar.url != '' %}{{user.avatar.url}}{% else %}{% static img %}img/avatars/0.jpg{% endif %}"
-                                    style="height: 60px; width: 100%;"></a>
-
+                                        style="height: 60px; width: 100%;"></a>
                                  </li>
+                                <li>
+                                <a href="/search" class="btn-fluid menu-btn tooltipped"
+                                    data-toggle="tooltip" data-placement="bottom"
+                                    data-position="right" data-delay="50" data-tooltip="Search">
+                                    <span class="glyphicon glyphicon-search increased"></span>
+                                </a>
+                                </li>
                                 <li>
                                 <a href="/" class="btn-fluid menu-btn tooltipped"
                                     data-toggle="tooltip" data-placement="bottom"
@@ -37,11 +45,11 @@
                                     <span class="glyphicon glyphicon-home increased"></span>
                                 </a>
                                 </li>
-                                <li  >
+                                <li style="text-align: center; left: 3px;">
                                 <a href="/add-post" class="tooltipped"
                                    data-content="Add post" data-toggle="tooltip" data-placement="bottom"
                                    data-position="right" data-delay="50" data-tooltip="New post">
-                                    <i class="material-icons medium" >playlist_add</i>
+                                    <span class="glyphicon glyphicon-edit increased"></span>
                                 </a>
                                 </li>
                                 <li>
@@ -61,6 +69,13 @@
                                 </a>
                                 </li>
                             {% else %}
+                                <li>
+                                <a href="/search" class="btn-fluid menu-btn tooltipped"
+                                    data-toggle="tooltip" data-placement="bottom"
+                                    data-position="right" data-delay="50" data-tooltip="Search">
+                                    <span class="glyphicon glyphicon-search increased"></span>
+                                </a>
+                                </li>
                                 <li>
                                 <a href="/" class="btn-fluid menu-btn tooltipped"
                                     data-toggle="tooltip" data-placement="bottom"

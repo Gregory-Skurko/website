@@ -31,6 +31,14 @@ class RegisterForm(forms.Form):
             return username
         raise forms.ValidationError('%s already exists' % username)
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return email
+        raise forms.ValidationError('%s already exists' % email)
+
     def clean_avatar(self):
         avatar = self.cleaned_data.get('avatar', False)
         if avatar:
@@ -78,6 +86,14 @@ class ChangePersonalInformationForm(forms.Form):
                 raise forms.ValidationError("Image file too large ( > 4mb )")
             else:
                 return avatar
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return email
+        raise forms.ValidationError('%s already exists' % email)
 
     def clean(self):
         data = self.cleaned_data

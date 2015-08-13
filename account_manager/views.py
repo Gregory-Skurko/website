@@ -79,12 +79,18 @@ def profile(request):
     if request.method == 'POST':
         form = ChangePersonalInformationForm(request.user, request.POST, request.FILES)
         if form.is_valid():
+            if form.cleaned_data['email']:
+                request.user.email = form.cleaned_data['email']
+                request.user.save()
+
             if form.cleaned_data['new_password']:
                 request.user.set_password(form.cleaned_data['new_password'])
                 request.user.save()
+
             if form.cleaned_data['avatar']:
                 request.user.avatar = form.cleaned_data['avatar']
                 request.user.save()
+
     else:
         form = ChangePersonalInformationForm()
 

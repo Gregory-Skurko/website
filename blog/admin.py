@@ -6,14 +6,26 @@ from django.utils.translation import ugettext_lazy as _
 
 # Register your models here.
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('user', 'title', 'created')
+    list_display = ('user_view', 'title', 'created')
+
+    def user_view(self, obj):
+        return obj.user
+
+    user_view.short_description = 'Whose'
 
 class CommentAdmin(admin.ModelAdmin):
-    list_display = ('post', 'created')
+    list_display = ('post', 'user_view', 'created')
+
+    def user_view(self, obj):
+        return obj.user
+
+    user_view.short_description = 'Whose'
 
 class UserAdmin(BaseUserAdmin):
     form = AdminUserChangeForm
     add_form = AdminUserAddForm
+
+    list_display = ('username', 'email', 'last_login', 'date_joined',)
     fieldsets = (
         (None, {'fields': ('username', 'password')}),
         (_('Personal info'), {'fields': (
@@ -27,8 +39,8 @@ class UserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password1', 'password2', 'avatar')}
-        ),
+            'fields': ('username', 'email', 'password', 'avatar')}
+         ),
     )
 
 
@@ -36,22 +48,3 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Tag)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

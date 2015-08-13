@@ -13,7 +13,7 @@
     </ul>
 </div>
 {% if comments %}
-    <div style="padding-bottom: 1em;">Comments:</div>
+    <div class="post">Comments:</div>
     {% for comment in comments %}
         <div class="comment">
             <div><b>{{comment.user.username}}</b><span class="date">{{comment.created}}</span></div>
@@ -23,20 +23,26 @@
 {% endif %}
 
     {% if user.is_authenticated %}
-    <form action="" class="form-horizontal" method="post" style="background: white; padding: 1em;">
+    <form action="" class="form-horizontal post" method="post" >
         {% csrf_token %}
         <div class="row">
             <div class="input-field col s12">
               {{form.body}}
-              <label for="body">Comment</label>
+              <label for="{{form.body.id_for_label}}">Comment</label>
             </div>
+            {% if form.body.errors %}
+                <div class="alert alert-danger fade in">
+                    <strong>{{form.body.errors}}</strong>
+                </div>
+            {% else %}
+            {% endif %}
         </div>
         <div class="row">
             <button type="submit" class="waves-effect waves-light btn material-icons left">Send</button>
         </div>
     </form>
     {% else %}
-    <div style="background: white; padding: 1em;">
+    <div class="post">
         <a href="/register">Register</a> or <a href="/login">Login</a> to post a comment
     </div>
     {% endif %}

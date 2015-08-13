@@ -28,7 +28,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     user = models.ForeignKey(User)
-    post = models.OneToOneField(Post)
+    post = models.ForeignKey(Post)
     created = models.DateTimeField(auto_now_add=True)
     body = models.TextField()
     rating = models.IntegerField(default=0)
