@@ -7,7 +7,7 @@ from django.shortcuts import render, render_to_response
 
 # Create your views here.
 from django.template import RequestContext
-from blog.forms import CommentForm, RegisterForm, AuthorizeForm, NewPostForm
+from blog.forms import CommentForm, RegisterForm, AuthorizeForm, NewPostForm, ChangePersonalInformationForm
 from blog.models import Post, Comment, Tag, User
 
 
@@ -60,14 +60,16 @@ def register(request):
         args = {}
         if request.method == 'POST':
             form = RegisterForm(request.POST, request.FILES)
-            if form.is_valid() and form.cleaned_data['password'] == form.cleaned_data['password_confirm']:
+            if form.is_valid():
                 user = User(username=form.cleaned_data['username'],
                             password=make_password(form.cleaned_data['password']),
                             email=form.cleaned_data['email'],
                             avatar=form.cleaned_data['avatar'])
 
                 user.save()
-                return HttpResponseRedirect('/')
+                user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+                standart_login(request, user)
+                return HttpResponseRedirect('/' + request.POST['username'])
             else:
                 args.update({'error': True})
         else:
@@ -129,7 +131,20 @@ def add_post(request):
 
 
 def profile(request):
-    return render_to_response('blog/profile.html')
+    if not request.user.is_authenticated():
+        return HttpResponseRedirect('/login')
+
+    args = {}
+    if request.method == 'POST':
+        form = ChangePersonalInformationForm(request.user, request.POST, request.FILES)
+        if form.is_valid():
+            request.user.set_password(form.cleaned_data['new_password'])
+            request.user.save()
+    else:
+        form = ChangePersonalInformationForm()
+
+    args.update({'form': form})
+    return render_to_response('blog/profile.html', args, context_instance=RequestContext(request))
 
 
 def search(request, search_request=None, type_request=None):

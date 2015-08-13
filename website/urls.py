@@ -10,6 +10,7 @@ urlpatterns = [
 
     url(r'^$', blog_views.posts),
     url(r'^register/$', blog_views.register),
+    url(r'^profile/$', blog_views.profile),
     url(r'^login/$', blog_views.login),
     url(r'^logout/$', blog_views.logout),
     url(r'^add-post/$', blog_views.add_post),
