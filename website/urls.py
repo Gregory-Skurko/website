@@ -1,11 +1,18 @@
-from django.conf.urls import include, url
+from django.conf.urls import include, url, patterns
 from django.contrib import admin
 from blog import views as blog_views
 from account_manager import views as account_manager_views
+from website import settings
+
 urlpatterns = [
     # Examples:
     # url(r'^$', 'website.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
+    url(r'^media/(?P<path>.*)$', 'django.views.static.serve',
+            {'document_root': settings.MEDIA_ROOT, 'show_indexes': True }),
+    # url(r'^static/(?P<path>.*)$', 'django.views.static.serve',
+    #         {'document_root': settings.STATIC_ROOT, 'show_indexes': True }),
+
 
     url(r'^admin/', include(admin.site.urls)),
 
@@ -22,7 +29,11 @@ urlpatterns = [
 ]
 
 
-
+# if settings.DEBUG:
+#     urlpatterns += patterns("",
+#         (r'^media/(?P<path>.*)$', 'django.views.static.serve',
+#             {'document_root': settings.MEDIA_ROOT, 'show_indexes': True }),
+#         )
 
 
 

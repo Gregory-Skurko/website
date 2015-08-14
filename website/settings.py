@@ -15,7 +15,6 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
@@ -107,11 +106,35 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/').replace('\\', '/')
+MEDIA_URL = 'media/'
+
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static/').replace('\\', '/'),
 )
 
+
 USER_PROFILE_MODEL = 'account_manager.User'
 AUTH_USER_MODEL = 'account_manager.User'
-MEDIA_URL='/'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

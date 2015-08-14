@@ -19,6 +19,7 @@ class Post(models.Model):
     tag = models.ManyToManyField(Tag, blank=True)
     body = models.TextField()
     rating = models.IntegerField(default=0)
+    visible = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title

@@ -5,6 +5,10 @@ body {
     background: #383838;
 }
 
+img {
+    width: 95%;
+}
+
 .avatar {
     height: 50px;
     width: 60px;

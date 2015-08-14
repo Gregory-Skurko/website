@@ -7,7 +7,7 @@ AbstractUser._meta.get_field('email')._unique = True
 AbstractUser._meta.get_field('email').blank = False
 # Create your models here.
 class User(AbstractUser):
-    avatar = models.ImageField(upload_to='static/img/avatars/', blank=True)
+    avatar = models.ImageField(upload_to='img/avatars/', blank=True)
 
 # These two auto-delete files from filesystem when they are unneeded:
 @receiver(models.signals.post_delete, sender=User)
