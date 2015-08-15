@@ -5,21 +5,21 @@ from account_manager.models import User
 class RegisterForm(forms.Form):
     alphanumeric = RegexValidator(r'^[0-9a-zA-Z]*$', 'Only alphanumeric characters are allowed.')
 
-    username = forms.CharField(required=True, validators=[alphanumeric],
+    username = forms.CharField(label='Username', required=True, validators=[alphanumeric],
                                widget=forms.TextInput(
                                    attrs={'id': 'username', 'class': 'validate'}))
 
-    password = forms.CharField(required=True,
+    password = forms.CharField(label='Password', required=True,
                                widget=forms.PasswordInput(
                                    attrs={'id': 'password', 'class': 'validate'}))
 
-    password_confirm = forms.CharField(required=True, widget=forms.PasswordInput(
+    password_confirm = forms.CharField(label='Confirm password', required=True, widget=forms.PasswordInput(
         attrs={'id': 'password_confirm', 'class': 'validate'}))
 
-    email = forms.EmailField(required=True, widget=forms.TextInput(
+    email = forms.EmailField(label='Email', required=True, widget=forms.TextInput(
         attrs={'id': 'email', 'class': 'validate', 'type': 'email'}))
 
-    avatar = forms.ImageField(required=False,
+    avatar = forms.ImageField(label='Avatar', required=False,
                               widget=forms.FileInput(
                                   attrs={'id': 'avatar', 'class': 'validate'}))
 
@@ -56,21 +56,21 @@ class RegisterForm(forms.Form):
 
 
 class ChangePersonalInformationForm(forms.Form):
-    old_password = forms.CharField(required=False,
+    old_password = forms.CharField(label='Old password', required=False,
                                    widget=forms.PasswordInput(
                                        attrs={'id': 'old_password', 'class': 'validate'}))
 
-    new_password = forms.CharField(required=False,
+    new_password = forms.CharField(label='New password', required=False,
                                    widget=forms.PasswordInput(
                                        attrs={'id': 'new_password', 'class': 'validate'}))
 
-    password_confirm = forms.CharField(required=False, widget=forms.PasswordInput(
+    password_confirm = forms.CharField(label='Confirm password', required=False, widget=forms.PasswordInput(
         attrs={'id': 'password_confirm', 'class': 'validate'}))
 
-    email = forms.EmailField(required=False, widget=forms.TextInput(
+    email = forms.EmailField(label='New email', required=False, widget=forms.TextInput(
         attrs={'id': 'email', 'class': 'validate', 'type': 'email'}))
 
-    avatar = forms.ImageField(required=False,
+    avatar = forms.ImageField(label='New avatar', required=False,
                               widget=forms.FileInput(
                                   attrs={'id': 'avatar', 'class': 'validate'}))
 

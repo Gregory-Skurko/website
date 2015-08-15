@@ -51,6 +51,10 @@ img {
     text-align: center;
 }
 
+.menu-panel {
+    border: 0;
+    background-color: transparent;
+}
 .comment {
     //background: #d3d3d3;
     background: white;

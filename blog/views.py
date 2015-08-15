@@ -73,9 +73,8 @@ def add_post(request):
 
         if request.method == 'POST':
             form = NewPostForm(request.POST)
-
             if form.is_valid():
-                visible = True if form.cleaned_data['visible'] == 'True' else False
+                visible = True if form.cleaned_data['visible'] == 'public' else False
                 new_post = Post(user=request.user,
                                 title=form.cleaned_data['title'],
                                 body=form.cleaned_data['body'],
@@ -108,10 +107,10 @@ def search(request, search_request=None, type_request=None):
 
             if form.is_valid():
                 request_type = form.cleaned_data['request_type']
-                request = form.cleaned_data['request']
+                request_value = form.cleaned_data['request']
                 if request_type == 'tag':
                     existing_tags = [t.tag for t in Tag.objects.all()]
-                    tags = [tag for tag in request.split() if tag in existing_tags]
+                    tags = [tag for tag in request_value.split() if tag in existing_tags]
                     list_post = []
 
                     for post in Post.objects.filter(visible=True):
@@ -124,10 +123,10 @@ def search(request, search_request=None, type_request=None):
 
                 elif request_type == 'user':
                     args.update({'posts': Post.objects.filter(visible=True,
-                                                              user=User.objects.get(username=request))})
+                                                              user=User.objects.get(username=request_value))})
 
                 elif request_type == 'post':
-                    args.update({'posts': Post.objects.filter(visible=True, title=request)})
+                    args.update({'posts': Post.objects.filter(visible=True, title=request_value)})
         else:
             form = SearchForm()
 

@@ -4,22 +4,22 @@ from blog.models import User
 
 
 class CommentForm(forms.Form):
-    body = forms.CharField(label='Text', widget=forms.Textarea(
+    body = forms.CharField(label='Comment', widget=forms.Textarea(
         attrs={'class': 'materialize-textarea', 'id': 'body'}))
 
 class NewPostForm(forms.Form):
-    title = forms.CharField(required=True,
+    title = forms.CharField(label='Title', required=True,
         widget=forms.TextInput(attrs={'id': 'title'}))
-    body = forms.CharField(required=True,
+    body = forms.CharField(label='Body', required=True,
                            widget=forms.Textarea(attrs={'id': 'body', 'class': 'materialize-textarea'}))
-    tags = forms.CharField(required=False,
+    tags = forms.CharField(label='Tags', required=False,
         widget=forms.TextInput(attrs={'id': 'tags', 'class': 'validate', 'placeholder': 'List tags separated by space'}))
 
     VISIBLE_TYPE = (
         ('public', 'Public'),
         ('private', 'Private'),
     )
-    visible = forms.ChoiceField(
+    visible = forms.ChoiceField(label='',
         widget=forms.RadioSelect(attrs={'id': 'radio'}),
         choices=VISIBLE_TYPE, initial='public')
 

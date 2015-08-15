@@ -2,82 +2,21 @@
 
 {% block content %}
 <div class="row">
-<form action="" class="col s12" method="post" enctype="multipart/form-data" style="background: white; padding: 1em;">
+<form action="" class="post col s12" method="post" enctype="multipart/form-data" >
         {% csrf_token %}
-            {% if form.password_confirm.errors or form.non_field_errors %}
-                <div class="alert alert-danger fade in">
-            {% endif %}
-        <div class="row">
-            <div class="input-field col s12">
-                <i class="material-icons prefix">lock</i>
-                <label for="{{form.old_password.id_for_label}}">Old password</label>
-                {{form.old_password}}
-            </div>
-            {% if form.old_password.errors %}
-                <div class="alert alert-danger fade in">
-                    <strong>{{form.old_password.errors}}</strong>
-                </div>
-            {% else %}
-            {% endif %}
-        </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <i class="material-icons prefix">lock</i>
-                {{form.new_password}}
-                <label for="{{form.new_password.id_for_label}}">New password</label>
-            </div>
-            {% if form.new_password.errors %}
-                <div class="alert alert-danger fade in">
-                    <strong>{{form.new_password.errors}}</strong>
-                </div>
-            {% else %}
-            {% endif %}
-        </div>
-        <div class="row">
-            <div class="input-field col s12">
-                <i class="material-icons prefix">lock</i>
-                {{form.password_confirm}}
-                <label for="{{form.password_confirm.id_for_label}}">Confirm password</label>
-            </div>
-            <!--{% if form.password_confirm.errors or form.non_field_errors %}-->
-                <!--<div class="alert alert-danger fade in">-->
-                    <!--<strong>{{form.password_confirm.errors}}{{form.non_field_errors}}</strong>-->
-                <!--</div>-->
-            <!--{% else %}-->
-            <!--{% endif %}-->
-        </div>
-            {% if form.non_field_errors %}
-                    <strong>{{form.non_field_errors}}</strong>
-                </div>
-            {% endif %}
-        <div class="row">
-            <div class="input-field col s12">
-                <i class="material-icons prefix">email</i>
-                {{form.email}}
-                <label for="{{form.email.id_for_label}}">New email</label>
-            </div>
-            {% if form.email.errors %}
-                <div class="alert alert-danger fade in">
-                    <strong>{{form.email.errors}}</strong>
-                </div>
-            {% else %}
-            {% endif %}
-        </div>
+        {% if form.password_confirm.errors or form.non_field_errors %}
+        <div class="alert alert-danger fade in">
+        {% endif %}
 
-        <div class="row">
-            <div class="file-field input-field col s11">
-            <i class="material-icons prefix">file_upload</i>
-            {{form.avatar}}
-            <input class="file-path" type="text"/>
-            <label for="{{form.avatar.id_for_label}}">New avatar</label>
-        </div>
-            {% if form.avatar.errors %}
-                <div class="alert alert-danger fade in">
-                    <strong>{{form.avatar.errors}}</strong>
-                </div>
-            {% else %}
-            {% endif %}
-        </div>
+        {% include 'include/input_field.html' with form_field=form.old_password has_icon='lock' %}
+
+        {% include 'include/input_field.html' with form_field=form.new_password has_icon='lock' %}
+
+        {% include 'include/input_field.html' with form_field=form.password_confirm has_icon='lock' %}
+
+        {% include 'include/input_field.html' with form_field=form.email has_icon='email' %}
+
+        {% include 'include/upload_field.html' with form_field=form.avatar has_icon='file_upload' %}
 
         <div class="row">
             <button type="submit" class="waves-effect waves-light btn material-icons left">Send</button>

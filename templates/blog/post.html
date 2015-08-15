@@ -1,24 +1,14 @@
 {% extends 'blog/base.html' %}
 
 {% block content %}
-<div class="post">
-    <div><h3>{{post.title}}</h3></div>
-    {% if not post.visible %}<p style="color: red;">Private</p>{% endif %}
-    <div><span class="glyphicon glyphicon-time"></span>{{post.created}}</div>
-    <div class="post-text">{{post.body|truncatewords_html:120|safe}}</div>
-    <div><a href="/{{post.user.username}}/"><span class="glyphicon glyphicon-user"></span>{{post.user}}</a></div>
-    <ul class="tags">
-        {% for tag in post.tag.all %}
-            <li><a href="/search/tag/{{tag}}" class="tag">{{tag}}</a></li>
-        {% endfor %}
-    </ul>
-</div>
+{% include 'include/post.html' %}
+
 {% if comments %}
     <div class="post">Comments:</div>
     {% for comment in comments %}
         <div class="comment">
-            <div><b>{{comment.user.username}}</b><span class="date">{{comment.created}}</span></div>
-            <div>{{comment.body|safe}}</div>
+            <b>{{comment.user.username}}</b><span class="date">{{comment.created}}</span>
+            <p>{{comment.body|safe}}</p>
         </div>
     {% endfor %}
 {% endif %}
@@ -26,18 +16,9 @@
     {% if user.is_authenticated %}
     <form action="" class="form-horizontal post" method="post" >
         {% csrf_token %}
-        <div class="row">
-            <div class="input-field col s12">
-              {{form.body}}
-              <label for="{{form.body.id_for_label}}">Comment</label>
-            </div>
-            {% if form.body.errors %}
-                <div class="alert alert-danger fade in">
-                    <strong>{{form.body.errors}}</strong>
-                </div>
-            {% else %}
-            {% endif %}
-        </div>
+
+        {% include 'include/input_field.html' with form_field=form.body %}
+
         <div class="row">
             <button type="submit" class="waves-effect waves-light btn material-icons left">Send</button>
         </div>

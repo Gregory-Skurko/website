@@ -25,17 +25,7 @@
 </script>
 
 {% for post in posts reversed %}
-    <div class="post">
-        <div><a href="/{{post.user.username}}/post{{post.id}}"><h3>{{post.title}}</h3></a></div>
-        <div><span class="glyphicon glyphicon-time"></span>{{ post.created}}</div>
-        <div class="post-text">{{post.body|safe}}</div>
-        <div><a href="/{{post.user.username}}/"><span class="glyphicon glyphicon-user"></span>{{post.user}}</a></div>
-        <ul class="tags">
-            {% for tag in post.tag.all %}
-                <li><a href="/search/tag/{{tag}}" class="tag">{{tag}}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
+    {% include 'include/post.html' with is_href=True %}
 {% endfor %}
 
 {% endblock %}

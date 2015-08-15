@@ -1,0 +1,15 @@
+<div class="post">
+    {% if is_href %}<a href="/{{post.user.username}}/post{{post.id}}">{% endif %}
+    <h3>{{post.title}}</h3>
+    {% if is_href %}</a>{% endif %}
+
+    {% if not post.visible %}<p style="color: red;">Private</p>{% endif %}
+    <div><span class="glyphicon glyphicon-time"></span>{{post.created}}</div>
+    <div class="post-text">{{post.body|truncatewords_html:120|safe}}</div>
+    <div><a href="/{{post.user.username}}/"><span class="glyphicon glyphicon-user"></span>{{post.user}}</a></div>
+    <ul class="tags">
+        {% for tag in post.tag.all %}
+            <li><a href="/search/tag/{{tag}}" class="tag">{{tag}}</a></li>
+        {% endfor %}
+    </ul>
+</div>

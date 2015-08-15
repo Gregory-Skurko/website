@@ -3,18 +3,9 @@
 {% block content %}
 <form action="" class="form-horizontal post" method="post">
         {% csrf_token %}
-        <div class="row">
-          <div class="input-field col s12">
-              {{form.title}}
-              <label for="title">Title</label>
-          </div>
-            {% if form.title.errors %}
-                <div class="alert alert-danger fade in">
-                    <strong>{{form.title.errors}}</strong>
-                </div>
-            {% else %}
-            {% endif %}
-        </div>
+
+        {% include 'include/input_field.html' with form_field=form.title %}
+
         <div class="row">
             <div class="col s12">
                 {% for radio in form.visible %}
@@ -23,22 +14,13 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="row">
-            <div class="input-field col s12">
-              {{form.body}}
-              <label for="{{form.body.id_for_label}}">Body</label>
-            </div>
-            {% if form.body.errors %}
-                <div class="alert alert-danger fade in">
-                    <strong>{{form.body.errors}}</strong>
-                </div>
-            {% else %}
-            {% endif %}
-        </div>
+
+        {% include 'include/input_field.html' with form_field=form.body %}
+
         <div class="row">
           <div class="input-field col s12">
               {{form.tags}}
-              <label for="{{form.tags.id_for_label}}">Tags</label>
+              <label for="{{form.tags.id_for_label}}">{{form.tags.label}}</label>
           </div>
         </div>
         <div class="row">

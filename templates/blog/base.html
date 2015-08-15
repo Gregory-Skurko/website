@@ -20,82 +20,45 @@
 
 {% block menu %}
     <div class="span1 vert-offset-top-2 fixed">
-                <div class="panel panel-primary"style="border: 0; background-color: transparent;">
+                <div class="panel panel-primary menu-panel">
                         <ul class="nav nav-pills nav-stacked">
                             {% if user.is_authenticated %}
                                 <li>
-                                    <a href="/{{user.username}}" style="padding: 0;"
-                                       class="tooltipped"
-                                        data-toggle="tooltip" data-placement="bottom"
-                                        data-position="right" data-delay="50" data-tooltip="{{user.username}}">
-                                        <img src="{% if user.avatar.url != '' %}{{user.avatar.url}}{% else %}{% static img %}img/avatars/empty_account_icon.jpg{% endif %}"
-                                        style="height: 60px; width: 100%;"></a>
-                                 </li>
-                                <li>
-                                <a href="/search" class="btn-fluid menu-btn tooltipped"
+                                <a href="/{{user.username}}" style="padding: 0;"
+                                    class="tooltipped"
                                     data-toggle="tooltip" data-placement="bottom"
-                                    data-position="right" data-delay="50" data-tooltip="Search">
-                                    <span class="glyphicon glyphicon-search increased"></span>
+                                    data-position="right" data-delay="50" data-tooltip="{{user.username}}">
+                                <img src="{% if user.avatar.url != '' %}{{user.avatar.url}}{% else %}{% static img %}img/avatars/empty_account_icon.jpg{% endif %}"
+                                style="height: 60px; width: 100%;">
                                 </a>
                                 </li>
                                 <li>
-                                <a href="/" class="btn-fluid menu-btn tooltipped"
-                                    data-toggle="tooltip" data-placement="bottom"
-                                    data-position="right" data-delay="50" data-tooltip="Home">
-                                    <span class="glyphicon glyphicon-home increased"></span>
-                                </a>
-                                </li>
-                                <li style="text-align: center; left: 3px;">
-                                <a href="/add-post" class="tooltipped"
-                                   data-content="Add post" data-toggle="tooltip" data-placement="bottom"
-                                   data-position="right" data-delay="50" data-tooltip="New post">
-                                    <span class="glyphicon glyphicon-edit increased"></span>
-                                </a>
+                                    {% include 'include/menu_button.html' with href='/search' glyphicon_name='search' tooltip='Search' %}
                                 </li>
                                 <li>
-                                <a href="/profile" class="btn-fluid menu-btn tooltipped"
-                                    data-content="hange personal information" data-toggle="tooltip" data-placement="bottom"
-                                    data-position="right" data-delay="50" data-tooltip="Change personal information"
-                                    style="left: 2px;">
-                                    <span class="glyphicon glyphicon-cog increased"></span>
-                                </a>
+                                    {% include 'include/menu_button.html' with href='/' glyphicon_name='home' tooltip='Home' %}
                                 </li>
-                                <li>
-                                <a href="/logout" class="btn-fluid menu-btn tooltipped"
-                                    data-content="Log out" data-toggle="tooltip" data-placement="bottom"
-                                    data-position="right" data-delay="50" data-tooltip="Log out"
-                                    style="left: 2px;">
-                                    <span class="glyphicon glyphicon-log-out increased"></span>
-                                </a>
+                                <li style="left: 3px;">
+                                    {% include 'include/menu_button.html' with href='/add-post' glyphicon_name='edit' tooltip='New post' %}
+                                </li>
+                                <li style="left: 2px;">
+                                    {% include 'include/menu_button.html' with href='/profile' glyphicon_name='cog' tooltip='Change personal information' %}
+                                </li>
+                                <li style="left: 4px;">
+                                    {% include 'include/menu_button.html' with href='/logout' glyphicon_name='log-out' tooltip='Log out' %}
                                 </li>
                             {% else %}
                                 <li>
-                                <a href="/search" class="btn-fluid menu-btn tooltipped"
-                                    data-toggle="tooltip" data-placement="bottom"
-                                    data-position="right" data-delay="50" data-tooltip="Search">
-                                    <span class="glyphicon glyphicon-search increased"></span>
-                                </a>
+                                    {% include 'include/menu_button.html' with href='/search' glyphicon_name='search' tooltip='Search' %}
                                 </li>
                                 <li>
-                                <a href="/" class="btn-fluid menu-btn tooltipped"
-                                    data-toggle="tooltip" data-placement="bottom"
-                                    data-position="right" data-delay="50" data-tooltip="Home">
-                                    <span class="glyphicon glyphicon-home increased"></span>
-                                </a>
+                                    {% include 'include/menu_button.html' with href='/' glyphicon_name='home' tooltip='Home' %}
                                 </li>
                                 <li>
-                                <a href="/login" class="btn-fluid menu-btn tooltipped"
-                                   data-toggle="tooltip" data-placement="bottom"
-                                   data-position="right" data-delay="50" data-tooltip="Log in">
-                                    <span class="glyphicon glyphicon-log-in increased"></span>
-                                </a>
+                                    {% include 'include/menu_button.html' with href='/login' glyphicon_name='log-in' tooltip='Log in' %}
                                 </li>
                                 <li>
-                                <a href="/register" class="btn-fluid menu-btn tooltipped"
-                                   data-content="Register" data-toggle="tooltip" data-placement="bottom"
-                                   data-position="right" data-delay="50" data-tooltip="Register">
-                                    <span class="glyphicon glyphicon-registration-mark increased"></span>
-                                </a>
+                                    {% include 'include/menu_button.html' with href='/register' glyphicon_name='registration-mark' tooltip='Register' %}
                                 </li>
                             {% endif %}
                         </ul>
