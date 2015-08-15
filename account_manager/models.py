@@ -5,6 +5,7 @@ from django.dispatch import receiver
 
 AbstractUser._meta.get_field('email')._unique = True
 AbstractUser._meta.get_field('email').blank = False
+
 # Create your models here.
 class User(AbstractUser):
     avatar = models.ImageField(upload_to='img/avatars/', blank=True)

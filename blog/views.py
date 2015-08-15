@@ -1,7 +1,6 @@
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 
-# Create your views here.
 from django.template import RequestContext
 from account_manager.models import User
 from blog.forms import CommentForm, NewPostForm, SearchForm
@@ -15,7 +14,11 @@ def posts(request, username=None):
         if username is None:
             required_posts = Post.objects.reverse().filter(visible=True)
         else:
-            required_posts = Post.objects.reverse().filter(user=User.objects.get(username=username), visible=True)
+            user = User.objects.get(username=username)
+            if request.user.username == username:
+                required_posts = Post.objects.reverse().filter(user=user)
+            else:
+                required_posts = Post.objects.reverse().filter(user=user, visible=True)
 
         if len(required_posts) == 0:
             args.update({'empty': True})
@@ -45,7 +48,8 @@ def post(request, username, post_id):
             form = CommentForm(request.POST)
 
             if form.is_valid():
-                Comment(post=Post.objects.get(id=post_id), user=User.objects.get(username=request.user.username),
+                Comment(post=Post.objects.get(id=post_id),
+                        user=User.objects.get(username=request.user.username),
                         body=form.cleaned_data['body']).save()
 
                 return HttpResponseRedirect('/' + username + '/post' + post_id)
@@ -72,7 +76,9 @@ def add_post(request):
 
             if form.is_valid():
                 visible = True if form.cleaned_data['visible'] == 'True' else False
-                new_post = Post(user=request.user, title=form.cleaned_data['title'], body=form.cleaned_data['body'],
+                new_post = Post(user=request.user,
+                                title=form.cleaned_data['title'],
+                                body=form.cleaned_data['body'],
                                 visible=visible)
                 new_post.save()
 
@@ -102,10 +108,10 @@ def search(request, search_request=None, type_request=None):
 
             if form.is_valid():
                 request_type = form.cleaned_data['request_type']
-
+                request = form.cleaned_data['request']
                 if request_type == 'tag':
                     existing_tags = [t.tag for t in Tag.objects.all()]
-                    tags = [tag for tag in form.cleaned_data['request'].split() if tag in existing_tags]
+                    tags = [tag for tag in request.split() if tag in existing_tags]
                     list_post = []
 
                     for post in Post.objects.filter(visible=True):
@@ -117,10 +123,11 @@ def search(request, search_request=None, type_request=None):
                     args.update({'posts': list_post})
 
                 elif request_type == 'user':
-                    args.update({'posts': Post.objects.filter(visible=True, user=User.objects.get(username=form.cleaned_data['request']))})
+                    args.update({'posts': Post.objects.filter(visible=True,
+                                                              user=User.objects.get(username=request))})
 
                 elif request_type == 'post':
-                    args.update({'posts': Post.objects.filter(visible=True, title=form.cleaned_data['request'])})
+                    args.update({'posts': Post.objects.filter(visible=True, title=request)})
         else:
             form = SearchForm()
 

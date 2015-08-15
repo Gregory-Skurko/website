@@ -1,7 +1,7 @@
 from django.contrib.auth import logout as standart_logout, authenticate, login as standart_login
 from django.contrib.auth.hashers import make_password
 from django.http import HttpResponseRedirect, Http404
-from django.shortcuts import render, render_to_response
+from django.shortcuts import render_to_response
 
 # Create your views here.
 from django.template import RequestContext
@@ -18,7 +18,6 @@ def register(request):
         args = {}
 
         if request.method == 'POST':
-            pass
             form = RegisterForm(request.POST, request.FILES)
             if form.is_valid():
                 user = User(username=form.cleaned_data['username'],
@@ -27,9 +26,10 @@ def register(request):
                             avatar=form.cleaned_data['avatar'])
 
                 user.save()
-                user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+                user = authenticate(username=form.cleaned_data['username'],
+                                    password=form.cleaned_data['password'])
                 standart_login(request, user)
-                return HttpResponseRedirect('/' + request.POST['username'])
+                return HttpResponseRedirect('/' + form.cleaned_data['username'])
             else:
                 args.update({'error': True})
         else:
@@ -53,10 +53,11 @@ def login(request):
         if request.method == 'POST':
             form = AuthorizeForm(request.POST)
             if form.is_valid():
-                user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+                user = authenticate(username=form.cleaned_data['username'],
+                                    password=form.cleaned_data['password'])
                 if user is not None:
                     standart_login(request, user)
-                    return HttpResponseRedirect('/' + request.POST['username'])
+                    return HttpResponseRedirect('/' + form.cleaned_data['username'])
 
             args.update({'error': True})
         else:
@@ -107,3 +108,28 @@ def profile(request):
         raise Http404()
 
     return render_to_response(template, args, context_instance=RequestContext(request))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
