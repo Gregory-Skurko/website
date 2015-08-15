@@ -13,11 +13,19 @@ class CommentForm(forms.Form):
 
 class NewPostForm(forms.Form):
     title = forms.CharField(required=True,
-        widget=forms.TextInput(attrs={'id': 'title', 'class': 'validate'}))
+        widget=forms.TextInput(attrs={'id': 'title'}))
     body = forms.CharField(required=True,
                            widget=forms.Textarea(attrs={'id': 'body', 'class': 'materialize-textarea'}))
     tags = forms.CharField(required=False,
         widget=forms.TextInput(attrs={'id': 'tags', 'class': 'validate', 'placeholder': 'List tags separated by space'}))
+
+    VISIBLE_TYPE = (
+        ('public', 'Public'),
+        ('private', 'Private'),
+    )
+    visible = forms.ChoiceField(
+        widget=forms.RadioSelect(attrs={'id': 'radio'}),
+        choices=VISIBLE_TYPE, initial='public')
 
 
 class AdminUserAddForm(UserCreationForm):

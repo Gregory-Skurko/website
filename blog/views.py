@@ -1,9 +1,5 @@
-from django import forms
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth import logout as standart_logout, authenticate, login as standart_login
-from django.core.exceptions import ValidationError
-from django.http import HttpResponse, Http404, HttpResponseRedirect
-from django.shortcuts import render, render_to_response
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render_to_response
 
 # Create your views here.
 from django.template import RequestContext
@@ -14,101 +10,124 @@ from blog.models import Post, Comment, Tag
 
 def posts(request, username=None):
     try:
+        template = 'blog/posts.html'
         args = {}
         if username is None:
-            posts = Post.objects.all()
+            required_posts = Post.objects.reverse().filter(visible=True)
         else:
-            posts = Post.objects.reverse().filter(user=User.objects.get(username=username))
+            required_posts = Post.objects.reverse().filter(user=User.objects.get(username=username), visible=True)
 
-        if len(posts) == 0:
+        if len(required_posts) == 0:
             args.update({'empty': True})
         else:
-            args.update({'posts': posts})
+            args.update({'posts': required_posts})
 
         args.update({'user': request.user})
     except:
         raise Http404()
 
-    return render_to_response("blog/posts.html", args)
+    return render_to_response(template, args)
 
 
 def post(request, username, post_id):
     try:
+        template = 'blog/post.html'
         args = {}
-        args.update({'post': Post.objects.get(id=post_id)})
+        required_post = Post.objects.filter(id=post_id)
+
+        if not required_post.visible:
+            raise Http404()
+
+        args.update({'post': required_post})
         args.update({'comments': Comment.objects.filter(post=post_id)})
+
         if request.method == 'POST':
             form = CommentForm(request.POST)
+
             if form.is_valid():
                 Comment(post=Post.objects.get(id=post_id), user=User.objects.get(username=request.user.username),
                         body=form.cleaned_data['body']).save()
+
                 return HttpResponseRedirect('/' + username + '/post' + post_id)
         else:
             form = CommentForm()
+
         args.update({'form': form})
     except:
         raise Http404()
 
-    return render_to_response("blog/post.html", args, context_instance=RequestContext(request))
+    return render_to_response(template, args, context_instance=RequestContext(request))
 
 
 def add_post(request):
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect('/login')
+    try:
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect('/login')
 
-    if request.method == 'POST':
-        form = NewPostForm(request.POST)
-        if form.is_valid():
-            new_post = Post(user=request.user, title=form.cleaned_data['title'], body=form.cleaned_data['body'])
-            new_post.save()
+        template = 'blog/add-post.html'
+        args = {}
 
-            tags = form.cleaned_data['tags'].split()
-            for tag in tags:
-                new_tag = Tag(tag=tag)
-                new_tag.save()
-                new_post.tag.add(tag)
-            return HttpResponseRedirect('/' + request.user.username + '/post' + str(new_post.id))
-    else:
-        form = NewPostForm()
+        if request.method == 'POST':
+            form = NewPostForm(request.POST)
 
-    return render_to_response('blog/add-post.html', {'form': form}, context_instance=RequestContext(request))
+            if form.is_valid():
+                visible = True if form.cleaned_data['visible'] == 'True' else False
+                new_post = Post(user=request.user, title=form.cleaned_data['title'], body=form.cleaned_data['body'],
+                                visible=visible)
+                new_post.save()
+
+                tags = form.cleaned_data['tags'].split()
+                for tag in tags:
+                    new_tag = Tag(tag=tag)
+                    new_tag.save()
+                    new_post.tag.add(tag)
+
+                return HttpResponseRedirect('/' + request.user.username + '/post' + str(new_post.id))
+        else:
+            form = NewPostForm()
+
+        args.update({'form': form})
+    except:
+        raise Http404()
+    return render_to_response(template, args, context_instance=RequestContext(request))
 
 
 def search(request, search_request=None, type_request=None):
-    template = 'blog/search.html'
-    args = {}
+    try:
+        template = 'blog/search.html'
+        args = {}
 
-    if request.method == 'POST':
-        form = SearchForm(request.POST)
-        if form.is_valid():
-            request_type = form.cleaned_data['request_type']
-            if request_type == 'tag':
-                existing_tags = [t.tag for t in Tag.objects.all()]
-                tags = [tag for tag in form.cleaned_data['request'].split() if tag in existing_tags]
-                list_post = []
+        if request.method == 'POST':
+            form = SearchForm(request.POST)
 
-                for post in Post.objects.all():
-                    post_tags = [t.tag for t in post.tag.all()]
+            if form.is_valid():
+                request_type = form.cleaned_data['request_type']
 
-                    if all(tag in post_tags for tag in tags):
-                        list_post.append(post)
+                if request_type == 'tag':
+                    existing_tags = [t.tag for t in Tag.objects.all()]
+                    tags = [tag for tag in form.cleaned_data['request'].split() if tag in existing_tags]
+                    list_post = []
 
-                args.update({'posts': list_post})
-            elif request_type == 'user':
-                args.update({'posts': Post.objects.filter(user=User.objects.get(username=form.cleaned_data['request']))})
-            elif request_type == 'post':
-                args.update({'posts': Post.objects.filter(title=form.cleaned_data['request'])})
-    else:
-        list_post = []
-        for post in Post.objects.all():
-            post_tags = [t.tag for t in post.tag.all()]
-            if search_request in post_tags:
-                list_post.append(post)
-        args.update({'posts': list_post})
-        form = SearchForm()
+                    for post in Post.objects.filter(visible=True):
+                        post_tags = [t.tag for t in post.tag.all()]
 
-    args.update({'user': request.user})
-    args.update({'form': form})
+                        if all(tag in post_tags for tag in tags):
+                            list_post.append(post)
+
+                    args.update({'posts': list_post})
+
+                elif request_type == 'user':
+                    args.update({'posts': Post.objects.filter(visible=True, user=User.objects.get(username=form.cleaned_data['request']))})
+
+                elif request_type == 'post':
+                    args.update({'posts': Post.objects.filter(visible=True, title=form.cleaned_data['request'])})
+        else:
+            form = SearchForm()
+
+        args.update({'user': request.user})
+        args.update({'form': form})
+    except:
+        raise Http404()
     return render_to_response(template, args)
 
 

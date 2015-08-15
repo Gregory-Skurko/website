@@ -38,61 +38,72 @@ def register(request):
         args.update({'form': form})
     except:
         raise Http404()
+
     return render_to_response(template, args, context_instance=RequestContext(request))
 
 
 def login(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect('/' + request.user.username)
+    try:
+        if request.user.is_authenticated():
+            return HttpResponseRedirect('/' + request.user.username)
 
-    args = {}
-    template = 'account_manager/login.html'
+        args = {}
+        template = 'account_manager/login.html'
 
-    if request.method == 'POST':
-        form = AuthorizeForm(request.POST)
-        if form.is_valid():
-            user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
-            if user is not None:
-                standart_login(request, user)
-                return HttpResponseRedirect('/' + request.POST['username'])
+        if request.method == 'POST':
+            form = AuthorizeForm(request.POST)
+            if form.is_valid():
+                user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
+                if user is not None:
+                    standart_login(request, user)
+                    return HttpResponseRedirect('/' + request.POST['username'])
 
-        args.update({'error': True})
-    else:
-        form = AuthorizeForm()
+            args.update({'error': True})
+        else:
+            form = AuthorizeForm()
 
-    args.update({'form': form})
+        args.update({'form': form})
+    except:
+        raise Http404()
 
     return render_to_response(template, args, context_instance=RequestContext(request))
 
 
 def logout(request):
-    standart_logout(request)
+    try:
+        standart_logout(request)
+    except:
+        raise Http404()
     return HttpResponseRedirect('/login')
 
 def profile(request):
-    if not request.user.is_authenticated():
-        return HttpResponseRedirect('/login')
+    try:
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect('/login')
 
-    args = {}
-    template = 'account_manager/profile.html'
+        args = {}
+        template = 'account_manager/profile.html'
 
-    if request.method == 'POST':
-        form = ChangePersonalInformationForm(request.user, request.POST, request.FILES)
-        if form.is_valid():
-            if form.cleaned_data['email']:
-                request.user.email = form.cleaned_data['email']
-                request.user.save()
+        if request.method == 'POST':
+            form = ChangePersonalInformationForm(request.user, request.POST, request.FILES)
+            if form.is_valid():
+                if form.cleaned_data['email']:
+                    request.user.email = form.cleaned_data['email']
+                    request.user.save()
 
-            if form.cleaned_data['new_password']:
-                request.user.set_password(form.cleaned_data['new_password'])
-                request.user.save()
+                if form.cleaned_data['new_password']:
+                    request.user.set_password(form.cleaned_data['new_password'])
+                    request.user.save()
 
-            if form.cleaned_data['avatar']:
-                request.user.avatar = form.cleaned_data['avatar']
-                request.user.save()
+                if form.cleaned_data['avatar']:
+                    request.user.avatar = form.cleaned_data['avatar']
+                    request.user.save()
 
-    else:
-        form = ChangePersonalInformationForm()
+        else:
+            form = ChangePersonalInformationForm()
 
-    args.update({'form': form})
+        args.update({'form': form})
+    except:
+        raise Http404()
+
     return render_to_response(template, args, context_instance=RequestContext(request))

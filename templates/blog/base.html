@@ -28,7 +28,7 @@
                                        class="tooltipped"
                                         data-toggle="tooltip" data-placement="bottom"
                                         data-position="right" data-delay="50" data-tooltip="{{user.username}}">
-                                        <img src="{% if user.avatar.url != '' %}{{user.avatar.url}}{% else %}{% static img %}img/avatars/0.jpg{% endif %}"
+                                        <img src="{% if user.avatar.url != '' %}{{user.avatar.url}}{% else %}{% static img %}img/avatars/empty_account_icon.jpg{% endif %}"
                                         style="height: 60px; width: 100%;"></a>
                                  </li>
                                 <li>

@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 # Register your models here.
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('user_view', 'title', 'created')
+    list_display = ('user_view', 'title', 'visible', 'created')
 
     def user_view(self, obj):
         return obj.user
