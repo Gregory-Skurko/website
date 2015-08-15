@@ -2,7 +2,7 @@ from django.db import models
 from account_manager.models import User
 
 class Tag(models.Model):
-    tag = models.CharField(max_length=20, primary_key=True)
+    tag = models.CharField(max_length=30)
 
     def __str__(self):
         return self.tag

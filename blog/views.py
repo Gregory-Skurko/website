@@ -12,13 +12,13 @@ def posts(request, username=None):
         template = 'blog/posts.html'
         args = {}
         if username is None:
-            required_posts = Post.objects.reverse().filter(visible=True)
+            required_posts = Post.objects.filter(visible=True)
         else:
             user = User.objects.get(username=username)
             if request.user.username == username:
-                required_posts = Post.objects.reverse().filter(user=user)
+                required_posts = Post.objects.filter(user=user)
             else:
-                required_posts = Post.objects.reverse().filter(user=user, visible=True)
+                required_posts = Post.objects.filter(user=user, visible=True)
 
         if len(required_posts) == 0:
             args.update({'empty': True})
@@ -78,22 +78,30 @@ def add_post(request):
                 new_post = Post(user=request.user,
                                 title=form.cleaned_data['title'],
                                 body=form.cleaned_data['body'],
-                                visible=visible)
+                                visible=visible,)
                 new_post.save()
 
                 tags = form.cleaned_data['tags'].split()
+                existing_tags = [tag.tag for tag in Tag.objects.all()]
                 for tag in tags:
-                    new_tag = Tag(tag=tag)
-                    new_tag.save()
-                    new_post.tag.add(tag)
+                    if tag not in existing_tags:
+                        new_tag = Tag(tag=tag)
+                        existing_tags.append(tag)
+                        new_tag.save()
+                    else:
+                        new_tag = Tag.objects.get(tag__contains=tag)
+
+                    new_post.tag.add(new_tag)
 
                 return HttpResponseRedirect('/' + request.user.username + '/post' + str(new_post.id))
         else:
             form = NewPostForm()
 
         args.update({'form': form})
-    except:
-        raise Http404()
+    except Exception as e:
+        e = str(e)
+        raise Http404(e)
+
     return render_to_response(template, args, context_instance=RequestContext(request))
 
 
