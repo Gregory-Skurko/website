@@ -1,6 +1,6 @@
 from django.contrib import admin
 from blog.forms import AdminUserChangeForm, AdminUserAddForm
-from models import Post, Comment, Tag, User
+from models import Post, Comment, Tag, User, Rating
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.utils.translation import ugettext_lazy as _
 
@@ -47,3 +47,4 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Post, PostAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(Tag)
+admin.site.register(Rating)

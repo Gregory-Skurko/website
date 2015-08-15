@@ -6,10 +6,41 @@
     {% if not post.visible %}<p style="color: red;">Private</p>{% endif %}
     <div><span class="glyphicon glyphicon-time"></span>{{post.created}}</div>
     <div class="post-text">{{post.body|truncatewords_html:120|safe}}</div>
-    <div><a href="/{{post.user.username}}/"><span class="glyphicon glyphicon-user"></span>{{post.user}}</a></div>
+    <div class="row">
+        <a href="/{{post.user.username}}/"><span class="glyphicon glyphicon-user"></span>{{post.user}}</a>
+
+        <span style="padding: 0px 10px;">
+        <a href="like{{post.id}}/" id='like{{post.id}}'>
+            <span class="glyphicon glyphicon-thumbs-up"></span>
+        </a>
+        </span>
+
+        <a href="dislike{{post.id}}/" id='dislike{{post.id}}'>
+            <span class="glyphicon glyphicon-thumbs-down"></span>
+        </a>
+
+        <span {% if post.rating > 0 %}style="color: green;"{% endif %}>{{post.rating}}</span>
+
+    </div>
     <ul class="tags">
         {% for tag in post.tag.all %}
             <li><a href="/search/tag/{{tag}}" class="tag">{{tag}}</a></li>
         {% endfor %}
     </ul>
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

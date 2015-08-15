@@ -36,6 +36,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # 'django_extensions',
     'bootstrap3',
     'account_manager',
     'blog',
@@ -108,7 +109,7 @@ USE_TZ = True
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/').replace('\\', '/')
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
@@ -119,8 +120,10 @@ STATICFILES_DIRS = (
 USER_PROFILE_MODEL = 'account_manager.User'
 AUTH_USER_MODEL = 'account_manager.User'
 
-
-
+# GRAPH_MODELS = {
+#   'all_applications': True,
+#   'group_models': True,
+# }
 
 
 

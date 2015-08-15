@@ -25,11 +25,20 @@ class Migration(migrations.Migration):
             name='Post',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('visible', models.BooleanField(default=True)),
                 ('title', models.CharField(max_length=60)),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('body', models.TextField()),
                 ('rating', models.IntegerField(default=0)),
-                ('visible', models.BooleanField(default=True)),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Rating',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('value', models.BooleanField()),
+                ('post', models.ForeignKey(related_name='rating_post', to='blog.Post')),
+                ('user', models.ForeignKey(to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -47,7 +56,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='post',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='post_user', to=settings.AUTH_USER_MODEL),
         ),
         migrations.AddField(
             model_name='comment',
@@ -57,6 +66,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='comment',
             name='user',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            field=models.ForeignKey(related_name='comment_user', to=settings.AUTH_USER_MODEL),
+        ),
+        migrations.AddField(
+            model_name='comment',
+            name='voice',
+            field=models.ManyToManyField(related_name='comment_voice', to=settings.AUTH_USER_MODEL),
         ),
     ]

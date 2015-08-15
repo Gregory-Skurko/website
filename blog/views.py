@@ -1,11 +1,12 @@
+from django.core.urlresolvers import get_resolver
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 
 from django.template import RequestContext
 from account_manager.models import User
 from blog.forms import CommentForm, NewPostForm, SearchForm
-from blog.models import Post, Comment, Tag
-
+from blog.models import Post, Comment, Tag, Rating
+import website
 
 def posts(request, username=None):
     try:
@@ -145,7 +146,43 @@ def search(request, search_request=None, type_request=None):
     return render_to_response(template, args)
 
 
+def change_rating(request, username=None, post_id=None, rating=None):
+    try:
+        pass
+        if not request.user.is_authenticated():
+            return HttpResponseRedirect('/login')
 
+        post = Post.objects.get(id=post_id)
+
+        if post.user != request.user:
+            try:
+                user_rating = Rating.objects.get(user=request.user, post=post)
+            except:
+                new_rating = Rating(value=rating, user=request.user, post=post)
+                new_rating.save()
+                if rating is True:
+                    post.rating += 1
+                else:
+                    post.rating -= 1
+                post.save()
+            else:
+                if user_rating.value != rating:
+                    user_rating.value = rating
+                    user_rating.save()
+                    if rating is True:
+                        post.rating += 2
+
+                    else:
+                        post.rating -= 2
+                        pass
+                    post.save()
+
+    except:
+        raise Http404()
+    if username is not None and post_id is not None:
+        return HttpResponseRedirect('/' + username + '/post' + post_id)
+    else:
+        return HttpResponseRedirect('/')
 
 
 
