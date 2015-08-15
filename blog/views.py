@@ -36,9 +36,9 @@ def post(request, username, post_id):
     try:
         template = 'blog/post.html'
         args = {}
-        required_post = Post.objects.filter(id=post_id)
+        required_post = Post.objects.get(id=post_id)
 
-        if not required_post.visible:
+        if not required_post.visible and required_post.user != request.user:
             raise Http404()
 
         args.update({'post': required_post})
